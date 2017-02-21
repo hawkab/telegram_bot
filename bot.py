@@ -178,7 +178,7 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSING: [RegexHandler('^(Да|да|ДА|lf)$',
+            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$',
                                     send_to_all_confirm,
                                     pass_user_data=True),
                        RegexHandler('^Нет$',
