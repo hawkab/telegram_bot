@@ -42,16 +42,15 @@ def start(bot, update):
 #функция команады help
 def help(bot, update):
     reload(config)
-    bot.sendMessage(chat_id=update.message.chat_id, text='''список доступных команд: 
+    user = str(update.message.from_user.id)
+    help_message = '''список доступных команд: 
     /id - id пользователя
-    /ifconfig - сетевые настройки
-    /df - информация о дисковом пространстве (df -h)
+    '''
+    help_message += '''    /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
-    /mpstat - информация о нагрузке на процессор
-    /dir1 - объем папки''' + config.dir1 + '''
-    /dirbackup - размер файла бэкапа за текущий день в папке ''' + config.dir_backup + '''
+    /mpstat - информация о нагрузке на процессор''' if user in config.admin else ""
     
-    ''')
+    bot.sendMessage(chat_id=update.message.chat_id, text = help_message )
 
 #функция команады id
 def myid(bot, update):
