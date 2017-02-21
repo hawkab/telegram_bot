@@ -71,9 +71,9 @@ def run_command(command):
 def start(bot, update):
     welcome_text ="Привет, я бот, жду команды. "
     welcome_text += get_help_text ( update )
+    store_chat ( update )
 
     bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
-    store_chat ( update )
 
 def get_help_text ( update ):
     reload(config)
