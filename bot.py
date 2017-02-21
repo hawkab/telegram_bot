@@ -145,6 +145,9 @@ dispatcher.add_handler(add_to_listeners_handler)
 add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
 dispatcher.add_handler(add_to_admins_handler)
 
+count_users_handler = CommandHandler('count_users', get_count_users)
+dispatcher.add_handler(count_users_handler)
+
 df_handler = CommandHandler('df', df)
 dispatcher.add_handler(df_handler)
 
