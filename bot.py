@@ -30,7 +30,6 @@ def get_chat ( update ):
 
 def sql_exec ( request ):
     con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db' , timeout=10)
-    print request
     cur = con.cursor()
     cur.execute ( request )
     
@@ -40,8 +39,7 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     
-    sql_exec ("INSERT INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) " \
-        " VALUES (%d, '%s' , '%s' , '%s', '%s')" \
+    print sql_exec ("INSERT INTO CHAT VALUES (%d, '%s' , '%s' , '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
