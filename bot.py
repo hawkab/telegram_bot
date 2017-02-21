@@ -42,17 +42,13 @@ def sql_exec ( request ):
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-    print 1
-    message = update.message.get('from') 
-    print 2
-    print message['username']
     sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name
-            , message['username'] ))
+            , message.from_user.username ))
     
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
