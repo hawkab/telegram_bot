@@ -136,40 +136,37 @@ def free(bot, update):
 
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
-def main():
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+start_handler = CommandHandler('start', start)
+dispatcher.add_handler(start_handler)
 
-    restart_bot_handler = CommandHandler('restart_bot', restart_bot)
-    dispatcher.add_handler(restart_bot_handler)
+restart_bot_handler = CommandHandler('restart_bot', restart_bot)
+dispatcher.add_handler(restart_bot_handler)
 
-    add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
-    dispatcher.add_handler(add_to_listeners_handler)
+add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
+dispatcher.add_handler(add_to_listeners_handler)
 
-    add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
-    dispatcher.add_handler(add_to_admins_handler)
+add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
+dispatcher.add_handler(add_to_admins_handler)
 
-    get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
-    dispatcher.add_handler(get_count_chats_handler)
+get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
+dispatcher.add_handler(get_count_chats_handler)
 
-    send_to_all_handler = CommandHandler('send_to_all', send_to_all)
-    dispatcher.add_handler(send_to_all_handler)
+send_to_all_handler = CommandHandler('send_to_all', send_to_all)
+dispatcher.add_handler(send_to_all_handler)
 
-    df_handler = CommandHandler('df', df)
-    dispatcher.add_handler(df_handler)
+df_handler = CommandHandler('df', df)
+dispatcher.add_handler(df_handler)
 
-    free_handler = CommandHandler('free', free)
-    dispatcher.add_handler(free_handler)
-
-
-    myid_handler = CommandHandler('id', myid)
-    dispatcher.add_handler(myid_handler)
-
-    help_handler = CommandHandler('help', help)
-    dispatcher.add_handler(help_handler)
+free_handler = CommandHandler('free', free)
+dispatcher.add_handler(free_handler)
 
 
-    updater.start_polling()
+myid_handler = CommandHandler('id', myid)
+dispatcher.add_handler(myid_handler)
 
-if __name__ == '__main__':
-    main()
+help_handler = CommandHandler('help', help)
+dispatcher.add_handler(help_handler)
+
+
+updater.start_polling()
+
