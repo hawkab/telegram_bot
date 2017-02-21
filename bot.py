@@ -185,7 +185,7 @@ def main():
                                     cancel),
                        ],
 
-            TYPING_CHOICE: [MessageHandler(Filters.text,
+            OTHER: [MessageHandler(Filters.text,
                                            cancel,
                                            pass_user_data=True),
                             ],
