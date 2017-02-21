@@ -121,12 +121,22 @@ def send_to_all(bot, update):
             "Вы уверены, что хотите отправить всем: %s?" % promo,
             reply_markup=markup)
 
-        print CHOOSING
+        return CHOOSING
 
-        chat_list = sql_exec ("SELECT * FROM chat")
-        for chat in chat_list:
-            bot.sendMessage(chat_id= chat[0] , text=promo)
 
+def send_to_all(bot, update, user_data):
+    print update.message.text
+    print user_data['choice'] 
+    #chat_list = sql_exec ("SELECT * FROM chat")
+    #    for chat in chat_list:
+    #        bot.sendMessage(chat_id= chat[0] , text=promo)
+
+def regular_choice(bot, update, user_data):
+    text = update.message.text
+    user_data['choice'] = text
+    update.message.reply_text('Your %s? Yes, I would love to hear about that!' % text.lower())
+
+    return TYPING_REPLY
 
 def add_to_listeners(bot, update):
     userid = get_user ( update )
