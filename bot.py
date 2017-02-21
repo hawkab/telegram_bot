@@ -163,8 +163,9 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
-def cancel():
-    pass
+def cancel(bot, update):
+    print 'cancel'
+    return ConversationHandler.END
 
 def main():
 
