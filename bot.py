@@ -29,7 +29,7 @@ def get_chat ( update ):
     return update.message.chat_id
 
 def sql_exec ( request ):
-    con = sqlite3.connect('bot_store.db')
+    con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db')
     cur = con.cursor()
     cur.execute ( request )
     return cur.fetchall()
@@ -58,7 +58,7 @@ def store_chat ( update ):
                 , update.message.from_user.last_name
                 , update.message.from_user.username ))
 
-def get_count_users():
+def get_count_usr():
     return sql_exec ("SELECT COUNT(*) FROM USER")[0]
 
 
@@ -92,6 +92,7 @@ def help(bot, update):
     help_message += '''Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
+    /get_count_users - получить общее число пользователей
     /add_to_listeners - waiting for impl
     /add_to_admins - waiting for impl
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
@@ -111,7 +112,7 @@ def add_to_listeners(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def get_count_users (bot, update):
-    bot.sendMessage(chat_id= get_chat ( update ) , text=get_count_users())
+    bot.sendMessage(chat_id= get_chat ( update ) , text=get_count_usr())
     
 def restart_bot(bot, update):
     reload(config) 
