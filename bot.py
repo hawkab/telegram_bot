@@ -39,14 +39,15 @@ def sql_exec ( request ):
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-    print 1
-    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')" % ( chat_id , update.message.type , update.message.title , update.message.first_name , update.message.last_name ))
-    print 2
+    print update
     sql_exec ("INSERT OR REPLACE INTO USER (ID, FIRST_NAME, LAST_NAME, USERNAME)" \
         " VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s' )" %  ( user_id 
             , update.message.from_user.first_name 
             , update.message.from_user.last_name 
             , update.message.from_user.username ))
+    print 2
+    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')" % ( chat_id , update.message.type , update.message.title , update.message.first_name , update.message.last_name ))
+    
 
 def get_count_usr():
     result = ""
