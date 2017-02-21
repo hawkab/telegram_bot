@@ -30,27 +30,29 @@ def get_chat ( update ):
 
 def sql_exec ( request ):
     con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db')
-    print 1
+
     cur = con.cursor()
     cur.execute ( request )
-    print 2
+    
     return cur.fetchall()
 
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-
-    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')"  % 
-        ( chat_id 
-            , update.message.type 
-            , update.message.title
-            , update.message.first_name 
+    print 1
+    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME)" \
+        " VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')"  % \
+        ( chat_id \
+            , update.message.type \
+            , update.message.title \
+            , update.message.first_name \
             , update.message.last_name ))
-
-    sql_exec ("INSERT OR REPLACE INTO USER (ID, FIRST_NAME, LAST_NAME, USERNAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s' )"  % 
-            ( user_id 
-            , update.message.from_user.first_name
-            , update.message.from_user.last_name
+    print 2
+    sql_exec ("INSERT OR REPLACE INTO USER (ID, FIRST_NAME, LAST_NAME, USERNAME)" \
+        " VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s' )"  % \
+            ( user_id \
+            , update.message.from_user.first_name \
+            , update.message.from_user.last_name \
             , update.message.from_user.username ))
 
 def get_count_usr():
