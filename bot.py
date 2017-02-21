@@ -121,7 +121,7 @@ def send_to_all(bot, update):
             "Вы уверены, что хотите отправить всем: %s?" % promo,
             reply_markup=markup)
 
-        return CHOOSING
+        return send_to_all_confirm_bot_handler
 
 
 def send_to_all(bot, update, user_data):
@@ -171,17 +171,9 @@ def cancel():
 
 def main():
 
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
 
-        states={
-            CHOOSING: [RegexHandler('^(Да)$', send_to_all, pass_user_data=True)],
-        },
-
-        fallbacks=[CommandHandler('cancel', cancel)]
-    )
-
-    dispatcher.add_handler(conv_handler)
+    send_to_all_confirm_bot_handler = RegexHandler('^(Да)$', send_to_all, pass_user_data=True)
+    dispatcher.add_handler(send_to_all_confirm_bot_handler)
 
     restart_bot_handler = CommandHandler('restart_bot', restart_bot)
     dispatcher.add_handler(restart_bot_handler)
