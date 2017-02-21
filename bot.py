@@ -109,7 +109,7 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-
+    
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды: 
@@ -124,6 +124,7 @@ def send_to_all_confirm(bot, update, user_data):
     print 1
     print update.message.text
     print user_data['choice'] 
+    update.message.reply_text('Your %s? Yes, I would love to hear about that!' % text.lower())
     #chat_list = sql_exec ("SELECT * FROM chat")
     #    for chat in chat_list:
     #        bot.sendMessage(chat_id= chat[0] , text=promo)
