@@ -169,9 +169,13 @@ def cancel():
 def main():
 
     conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
+
         states={
             CHOOSE: [RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)]
-        }
+        },
+
+        fallbacks=[CommandHandler('cancel', send_to_all_confirm)]
     )
 
     dispatcher.add_handler(conv_handler)
@@ -204,8 +208,8 @@ def main():
     myid_handler = CommandHandler('id', myid)
     dispatcher.add_handler(myid_handler)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    #start_handler = CommandHandler('start', start)
+    #dispatcher.add_handler(start_handler)
 
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
