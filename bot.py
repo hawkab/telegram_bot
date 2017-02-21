@@ -83,9 +83,10 @@ def get_help_text ( update ):
 Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
-    /get_count_chats - получить общее число пользователей
+    /get_count_chats - получить общее число чатов
     /add_to_listeners - waiting for impl
     /add_to_admins - waiting for impl
+    /send_to_all - отправка сообщения всем чатам
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
     return help_text
 
@@ -106,7 +107,7 @@ def send_to_all(bot, update):
     print chat_list
     for chat in chat_list:
         print chat
-        bot.sendMessage(chat_id= chat[0] , text='Это сообщение было отправлено всем')
+        bot.sendMessage(chat_id= chat[0] , text='Кто тебя создал... такую?')
 
 
 def add_to_listeners(bot, update):
