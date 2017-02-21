@@ -23,9 +23,6 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 
 CHOOSING = range(1)
 
-reply_keyboard = ['Да', 'Нет']
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
@@ -117,6 +114,8 @@ def send_to_all(bot, update):
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды 
 /send_to_all Этот текст будет отправлен всем чатам''')
     else:
+        reply_keyboard = [['Да', 'Нет']]
+        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         update.message.reply_text(
             "Вы уверены, что хотите отправить всем: %s?" % promo,
             reply_markup=markup)
