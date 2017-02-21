@@ -53,7 +53,7 @@ def help(bot, update):
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
     /mpstat - информация о нагрузке на процессор
-    /restart_bot - перезагрузка службы бота после обновления кода''' if is_admin ( user ) else ""
+    /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
     
     bot.sendMessage(chat_id=update.message.chat_id, text = help_message )
 
@@ -82,14 +82,6 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
 
-def mpstat(bot, update):
-    reload(config) 
-    user = str ( get_user ( update ) )
-    if is_admin ( user ): 
-        run_command("mpstat")
-        bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
-
-    
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
@@ -102,8 +94,6 @@ dispatcher.add_handler(df_handler)
 free_handler = CommandHandler('free', free)
 dispatcher.add_handler(free_handler)
 
-mpstat_handler = CommandHandler('mpstat', mpstat)
-dispatcher.add_handler(mpstat_handler)
 
 myid_handler = CommandHandler('id', myid)
 dispatcher.add_handler(myid_handler)
