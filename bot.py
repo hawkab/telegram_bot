@@ -18,8 +18,7 @@ from imp import reload #модуль для перезагрузки (обнов
 #Проверка бота
 #print(bot.getMe())
 from telegram import (ReplyKeyboardMarkup,ReplyKeyboardRemove)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
-                          ConversationHandler)
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler)
 
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
@@ -109,7 +108,6 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-    print 'enter in send'
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды: 
@@ -120,7 +118,7 @@ def send_to_all(bot, update):
         update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
 
 def send_to_all_confirm(bot, update, user_data):
-    print 1
+    print 'enter in confirm'
     print update.message.text
     print user_data['choice'] 
     update.message.reply_text('Your %s? Yes, I would love to hear about that!' % text.lower())
