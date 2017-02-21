@@ -76,14 +76,11 @@ def run_command(command):
 def start(bot, update):
     welcome_text ="Привет, я бот, жду команды. "
     welcome_text += get_help_text ( update )
-    #bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
+    bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
     try:
         store_chat ( update )
     except:
         pass
-    reply_keyboard = [['Да', 'Нет']]
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
     return CHOOSE
 
 
@@ -193,36 +190,36 @@ def main():
     #send_to_all_confirm_handler = RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)
     #dispatcher.add_handler(send_to_all_confirm_handler)
 
-    #restart_bot_handler = CommandHandler('restart_bot', restart_bot)
-    #dispatcher.add_handler(restart_bot_handler)
+    restart_bot_handler = CommandHandler('restart_bot', restart_bot)
+    dispatcher.add_handler(restart_bot_handler)
 
-    #add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
-    #dispatcher.add_handler(add_to_listeners_handler)
+    add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
+    dispatcher.add_handler(add_to_listeners_handler)
 
-    #add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
-    #dispatcher.add_handler(add_to_admins_handler)
+    add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
+    dispatcher.add_handler(add_to_admins_handler)
 
-    #get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
-    #dispatcher.add_handler(get_count_chats_handler)
+    get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
+    dispatcher.add_handler(get_count_chats_handler)
 
-    #send_to_all_handler = CommandHandler('send_to_all', send_to_all)
-    #dispatcher.add_handler(send_to_all_handler)
+    send_to_all_handler = CommandHandler('send_to_all', send_to_all)
+    dispatcher.add_handler(send_to_all_handler)
 
-    #df_handler = CommandHandler('df', df)
-    #dispatcher.add_handler(df_handler)
+    df_handler = CommandHandler('df', df)
+    dispatcher.add_handler(df_handler)
 
-    #free_handler = CommandHandler('free', free)
-    #dispatcher.add_handler(free_handler)
+    free_handler = CommandHandler('free', free)
+    dispatcher.add_handler(free_handler)
 
 
-    #myid_handler = CommandHandler('id', myid)
-    #dispatcher.add_handler(myid_handler)
+    myid_handler = CommandHandler('id', myid)
+    dispatcher.add_handler(myid_handler)
 
     #start_handler = CommandHandler('start', start)
     #dispatcher.add_handler(start_handler)
 
-    #help_handler = CommandHandler('help', help)
-    #dispatcher.add_handler(help_handler)
+    help_handler = CommandHandler('help', help)
+    dispatcher.add_handler(help_handler)
 
 
     updater.start_polling()
