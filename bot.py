@@ -18,6 +18,12 @@ from imp import reload #модуль для перезагрузки (обнов
 #Проверка бота
 #print(bot.getMe())
 from telegram.ext import Updater
+
+CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
+
+reply_keyboard = [['Да', 'Нет']]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
@@ -107,8 +113,14 @@ def send_to_all(bot, update):
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды 
-    /send_to_all [текст]''')
+/send_to_all Этот текст будет отправлен всем чатам''')
     else:
+        update.message.reply_text(
+            "Вы уверены, что хотите отправить всем: %s?" % promo,
+            reply_markup=markup)
+
+        print CHOOSING
+
         chat_list = sql_exec ("SELECT * FROM chat")
         for chat in chat_list:
             bot.sendMessage(chat_id= chat[0] , text=promo)
@@ -148,8 +160,30 @@ def free(bot, update):
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
 def main():
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+
+    conv_handler = ConversationHandler(
+
+        states={
+            CHOOSING: [RegexHandler('^(Да|Нет)$',
+                                    regular_choice,
+                                    pass_user_data=True)
+                       ],
+
+            TYPING_CHOICE: [MessageHandler(Filters.text,
+                                           regular_choice,
+                                           pass_user_data=True),
+                            ],
+
+            TYPING_REPLY: [MessageHandler(Filters.text,
+                                          received_information,
+                                          pass_user_data=True),
+                           ],
+        },
+
+        fallbacks=[RegexHandler('^Done$', done, pass_user_data=True)]
+    )
+
+    dispatcher.add_handler(conv_handler)
 
     restart_bot_handler = CommandHandler('restart_bot', restart_bot)
     dispatcher.add_handler(restart_bot_handler)
@@ -175,6 +209,9 @@ def main():
 
     myid_handler = CommandHandler('id', myid)
     dispatcher.add_handler(myid_handler)
+
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
 
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
