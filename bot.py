@@ -7,6 +7,7 @@ import subprocess
 import sys
 import shlex
 import datetime
+import sqlite3
 from subprocess import Popen, PIPE
 from telegram.ext import CommandHandler
 from imp import reload #модуль для перезагрузки (обновления) других модулей
@@ -23,6 +24,43 @@ def is_admin ( user ):
 
 def get_user ( update ):
     return update.message.from_user.id
+
+def get_chat ( update ):
+    return update.message.chat_id
+
+def sql_exec ( request ):
+    con = sqlite3.connect('bot_store.db')
+    cur = con.cursor()
+    cur.execute ( request )
+    return cur.fetchall()
+
+def store_chat ( update ):
+    chat_id = get_chat ( update )
+    user_id = get_user ( update )
+    
+    finded = sql_exec ("SELECT COUNT(*) FROM CHAT C WHERE C.ID = %d" % chat_id)[0]
+
+    if finded == 0:
+        sql_exec ("INSERT INTO CHAT VALUES (%d,%s,%s,%s,%s)" % 
+            ( chat_id 
+                , update.message.type 
+                , update.message.title
+                , update.message.first_name 
+                , update.message.last_name ))
+
+    
+    finded = sql_exec ( "SELECT COUNT(*) FROM USER U WHERE U.ID = %d" % user_id )[0]
+
+    if finded == 0:
+        sql_exec ("INSERT INTO USER VALUES (%d,%s,%s,%s)" % 
+            ( user_id 
+                , update.message.from_user.first_name
+                , update.message.from_user.last_name
+                , update.message.from_user.username ))
+
+def get_count_users():
+    return sql_exec ("SELECT COUNT(*) FROM USER")[0]
+
 
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
@@ -41,8 +79,10 @@ def run_command(command):
     rc = process.poll()
     return rc
     
+
 def start(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id, text="Привет, я бот, жду команды.")
+    store_chat ( update )
+    bot.sendMessage(chat_id= get_chat ( update ), text="Привет, я бот, жду команды.")
 
 def help(bot, update):
     reload(config)
@@ -52,40 +92,59 @@ def help(bot, update):
     help_message += '''Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
+    /add_to_listeners - waiting for impl
+    /add_to_admins - waiting for impl
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
     
-    bot.sendMessage(chat_id=update.message.chat_id, text = help_message )
+    bot.sendMessage(chat_id= get_chat ( update ) , text = help_message )
 
 def myid(bot, update):
     userid = get_user ( update )
-    bot.sendMessage(chat_id=update.message.chat_id, text=userid)
+    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
+
+def add_to_admins(bot, update):
+    userid = get_user ( update )
+    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
+
+def add_to_listeners(bot, update):
+    userid = get_user ( update )
+    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
+
+def get_count_users (bot, update):
+    bot.sendMessage(chat_id= get_chat ( update ) , text=get_count_users())
     
 def restart_bot(bot, update):
     reload(config) 
     user = str ( get_user ( update ) )
     if is_admin ( user ): 
         run_command("systemctl restart telegram-bot.service && systemctl status telegram-bot.service")
-        bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
+        bot.sendMessage(chat_id= get_chat ( update ) , text=textoutput)
 
 def df(bot, update):
     reload(config) 
     user = str ( get_user ( update ) )
     if is_admin ( user ): 
         run_command("df -h")
-        bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
+        bot.sendMessage(chat_id=get_chat ( update ) , text=textoutput)
 
 def free(bot, update):
     reload(config) 
     user = str ( get_user ( update ) )
     if is_admin ( user ): 
         run_command("free -m")
-        bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
+        bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
 restart_bot_handler = CommandHandler('restart_bot', restart_bot)
 dispatcher.add_handler(restart_bot_handler)
+
+add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
+dispatcher.add_handler(add_to_listeners_handler)
+
+add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
+dispatcher.add_handler(add_to_admins_handler)
 
 df_handler = CommandHandler('df', df)
 dispatcher.add_handler(df_handler)
