@@ -30,8 +30,10 @@ def get_chat ( update ):
 
 def sql_exec ( request ):
     con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db')
+    print 1
     cur = con.cursor()
     cur.execute ( request )
+    print 2
     return cur.fetchall()
 
 def store_chat ( update ):
@@ -55,6 +57,7 @@ def get_count_usr():
     result = ""
     try:
         result = sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
+        print result
     except:
         result = "Ошибка выполнения запроса."
     return result 
