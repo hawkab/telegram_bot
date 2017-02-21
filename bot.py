@@ -41,9 +41,9 @@ def sql_exec ( request ):
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-    print update.message
-    print update.message['from']
-    print update.message['from']['username']
+    message = update.message
+    print update
+    print message['from']['username']
     sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
