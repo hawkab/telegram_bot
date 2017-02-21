@@ -124,7 +124,7 @@ def send_to_all(bot, update):
         return send_to_all_confirm_bot_handler
 
 
-def send_to_all(bot, update, user_data):
+def send_to_all_confirm(bot, update, user_data):
     print update.message.text
     print user_data['choice'] 
     #chat_list = sql_exec ("SELECT * FROM chat")
@@ -172,7 +172,7 @@ def cancel():
 def main():
 
 
-    send_to_all_confirm_bot_handler = RegexHandler('^(Да)$', send_to_all, pass_user_data=True)
+    send_to_all_confirm_bot_handler = RegexHandler('^(Да)$', send_to_all_confirm, pass_user_data=True)
     dispatcher.add_handler(send_to_all_confirm_bot_handler)
 
     restart_bot_handler = CommandHandler('restart_bot', restart_bot)
