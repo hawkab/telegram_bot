@@ -23,7 +23,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 
 CHOOSING = range(1)
 
-reply_keyboard = [['Да', 'Нет']]
+reply_keyboard = ['Да', 'Нет']
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
 updater = Updater(token=config.token)
