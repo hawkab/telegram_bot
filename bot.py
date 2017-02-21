@@ -8,7 +8,8 @@ import sys
 import shlex
 import datetime
 import MySQLdb
-import json
+
+from time import sleep
 from subprocess import Popen, PIPE
 from telegram.ext import CommandHandler
 from imp import reload #модуль для перезагрузки (обновления) других модулей
@@ -102,7 +103,8 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-    promo = "Это сообщение было отправлено всем чатам"
+
+    promo = str.replace ( update.message.text , '/send_to_all ', '')
     chat_list = sql_exec ("SELECT * FROM chat")
     for chat in chat_list:
         bot.sendMessage(chat_id= chat[0] , text=promo)
@@ -175,6 +177,6 @@ def main():
 
 
     updater.start_polling()
-    
+
 if __name__ == '__main__':
     main()
