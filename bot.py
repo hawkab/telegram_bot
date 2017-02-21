@@ -24,7 +24,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
-CHOOSE = range(2)
+CHOOSE, OTHER = range(2)
 
 
 def is_admin ( user ):
