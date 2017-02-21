@@ -1,224 +1,150 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#!/usr/bin/python
-import config #файл с настройками
-import telegram
-import os
-import subprocess
-import sys
-import shlex
-import datetime
-import MySQLdb
+#
+# Simple Bot to reply to Telegram messages
+# This program is dedicated to the public domain under the CC0 license.
+"""
+This Bot uses the Updater class to handle the bot.
+First, a few callback functions are defined. Then, those functions are passed to
+the Dispatcher and registered at their respective places.
+Then, the bot is started and runs until we press Ctrl-C on the command line.
+Usage:
+Example of a bot-user conversation using ConversationHandler.
+Send /start to initiate the conversation.
+Press Ctrl-C on the command line or send a signal to the process to stop the
+bot.
+"""
 
-from time import sleep
-from subprocess import Popen, PIPE
-from telegram.ext import CommandHandler
-from imp import reload #модуль для перезагрузки (обновления) других модулей
-
-#bot = telegram.Bot(token = config.token)
-#Проверка бота
-#print(bot.getMe())
-from telegram import (ReplyKeyboardMarkup,ReplyKeyboardRemove)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler)
-
+from telegram import ReplyKeyboardMarkup
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
+                          ConversationHandler)
+import config
+import logging
 updater = Updater(token=config.token)
-dispatcher = updater.dispatcher
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
-CHOOSE, OTHER = range(2)
+logger = logging.getLogger(__name__)
+
+CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
+
+reply_keyboard = [['Age', 'Favourite colour'],
+                  ['Number of siblings', 'Something else...'],
+                  ['Done']]
+markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
 
-def is_admin ( user ):
-    return True if user in config.admin else False
+def facts_to_str(user_data):
+    facts = list()
 
-def get_user ( update ):
-    return update.message.from_user.id
+    for key, value in user_data.items():
+        facts.append('%s - %s' % (key, value))
 
-def get_chat ( update ):
-    return update.message.chat_id
+    return "\n".join(facts).join(['\n', '\n'])
 
-def sql_exec ( request ):
-    con = MySQLdb.connect("localhost","king","masterkey1","telegram_bot" )
-    cur = con.cursor()
-    cur.execute ( request )
-    con.commit()
-    result = cur.fetchall()
-    con.close()
-
-    return result
-
-def store_chat ( update ):
-    chat_id = get_chat ( update )
-    user_id = get_user ( update )
-    sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
-        % ( chat_id 
-            , update.message.chat.type 
-            , update.message.chat.title 
-            , update.message.chat.first_name 
-            , update.message.chat.last_name
-            , update.message.from_user.username ))
-    
-#выполнение команды shell и вывод результата в телеграмм
-def run_command(command):
-    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-    global textoutput
-    textoutput = ''
-    while True:
-        global output
-        output = process.stdout.readline()
-        output = output.decode('utf8')
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            print (output.strip())
-        textoutput = textoutput + '\n' + output.strip()
-    rc = process.poll()
-    return rc
 
 def start(bot, update):
-    welcome_text ="Привет, я бот, жду команды. "
-    welcome_text += get_help_text ( update )
-    bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
-    store_chat ( update )
+    update.message.reply_text(
+        "Hi! My name is Doctor Botter. I will hold a more complex conversation with you. "
+        "Why don't you tell me something about yourself?",
+        reply_markup=markup)
+
+    return CHOOSING
 
 
-def get_help_text ( update ):
-    reload(config)
-    user = str ( get_user ( update ) )
-    help_text = '''Список общедоступных команд: 
-    /id - id пользователя'''
-    help_text += '''
-Список команд администратора:
-    /df - информация о дисковом пространстве (df -h)
-    /free - информация о памяти
-    /get_count_chats - получить общее число чатов
-    /add_to_listeners - waiting for impl
-    /add_to_admins - waiting for impl
-    /send_to_all [текст] - отправка сообщения всем чатам
-    /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
-    return help_text
-
-def help(bot, update):
-    bot.sendMessage(chat_id= get_chat ( update ) , text = get_help_text ( update ) )
-
-def myid(bot, update):
-    userid = get_user ( update )
-    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
-
-def add_to_admins(bot, update):
-    userid = get_user ( update )
-    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
-
-def send_to_all(bot, update):
-    promo = update.message.text.strip().replace('/send_to_all', '').strip()
-    if promo == '':
-        bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды: 
-/send_to_all Этот текст будет отправлен всем чатам''')
-    else:
-        reply_keyboard = [['Да', 'Нет']]
-        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-        update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
-
-def send_to_all_confirm(bot, update, user_data):
-    print 'enter in confirm'
-    print update.message.text
-    print user_data['choice'] 
+def regular_choice(bot, update, user_data):
+    text = update.message.text
+    user_data['choice'] = text
     update.message.reply_text('Your %s? Yes, I would love to hear about that!' % text.lower())
-    #chat_list = sql_exec ("SELECT * FROM chat")
-    #    for chat in chat_list:
-    #        bot.sendMessage(chat_id= chat[0] , text=promo)
+
+    return TYPING_REPLY
 
 
+def custom_choice(bot, update):
+    update.message.reply_text('Alright, please send me the category first, '
+                              'for example "Most impressive skill"')
 
-def add_to_listeners(bot, update):
-    userid = get_user ( update )
-    bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
+    return TYPING_CHOICE
 
-def get_count_chats (bot, update):
-    result = ""
-    try:
-        result = sql_exec ("SELECT COUNT(*) FROM chat")[0][0]
-    except:
-        result = "Ошибка выполнения запроса."
-    bot.sendMessage(chat_id= get_chat ( update ) , text=result)
-    
-def restart_bot(bot, update):
-    reload(config) 
-    user = str ( get_user ( update ) )
-    if is_admin ( user ): 
-        run_command("systemctl restart telegram-bot.service && systemctl status telegram-bot.service")
-        bot.sendMessage(chat_id= get_chat ( update ) , text=textoutput)
 
-def df(bot, update):
-    reload(config) 
-    user = str ( get_user ( update ) )
-    if is_admin ( user ): 
-        run_command("df -h")
-        bot.sendMessage(chat_id=get_chat ( update ) , text=textoutput)
+def received_information(bot, update, user_data):
+    text = update.message.text
+    category = user_data['choice']
+    user_data[category] = text
+    del user_data['choice']
 
-def free(bot, update):
-    reload(config) 
-    user = str ( get_user ( update ) )
-    if is_admin ( user ):
-        run_command("free -m")
-        bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
+    update.message.reply_text("Neat! Just so you know, this is what you already told me:"
+                              "%s"
+                              "You can tell me more, or change your opinion on something."
+                              % facts_to_str(user_data),
+                              reply_markup=markup)
 
-def cancel(bot, update, user_data):
-    print 'cancel'
-    update.message.reply_text('Bye! I hope we can talk again some day.',
-                              reply_markup=ReplyKeyboardRemove())
+    return CHOOSING
+
+
+def done(bot, update, user_data):
+    if 'choice' in user_data:
+        del user_data['choice']
+
+    update.message.reply_text("I learned these facts about you:"
+                              "%s"
+                              "Until next time!" % facts_to_str(user_data))
+
+    user_data.clear()
     return ConversationHandler.END
 
-def main():
 
+def error(bot, update, error):
+    logger.warn('Update "%s" caused error "%s"' % (update, error))
+
+
+def main():
+    # Create the Updater and pass it your bot's token.
+    updater = Updater("TOKEN")
+
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+
+    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True),
-                       RegexHandler('^Нет$',cancel, pass_user_data=True),]
+            CHOOSING: [RegexHandler('^(Age|Favourite colour|Number of siblings)$',
+                                    regular_choice,
+                                    pass_user_data=True),
+                       RegexHandler('^Something else...$',
+                                    custom_choice),
+                       ],
+
+            TYPING_CHOICE: [MessageHandler(Filters.text,
+                                           regular_choice,
+                                           pass_user_data=True),
+                            ],
+
+            TYPING_REPLY: [MessageHandler(Filters.text,
+                                          received_information,
+                                          pass_user_data=True),
+                           ],
         },
 
-        fallbacks=[CommandHandler('cancel', cancel, pass_user_data=True)]
+        fallbacks=[RegexHandler('^Done$', done, pass_user_data=True)]
     )
 
-    dispatcher.add_handler(conv_handler)
+    dp.add_handler(conv_handler)
 
-    #send_to_all_confirm_handler = RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)
-    #dispatcher.add_handler(send_to_all_confirm_handler)
+    # log all errors
+    dp.add_error_handler(error)
 
-    restart_bot_handler = CommandHandler('restart_bot', restart_bot)
-    dispatcher.add_handler(restart_bot_handler)
-
-    add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
-    dispatcher.add_handler(add_to_listeners_handler)
-
-    add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
-    dispatcher.add_handler(add_to_admins_handler)
-
-    get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
-    dispatcher.add_handler(get_count_chats_handler)
-
-    send_to_all_handler = CommandHandler('send_to_all', send_to_all)
-    dispatcher.add_handler(send_to_all_handler)
-
-    df_handler = CommandHandler('df', df)
-    dispatcher.add_handler(df_handler)
-
-    free_handler = CommandHandler('free', free)
-    dispatcher.add_handler(free_handler)
-
-
-    myid_handler = CommandHandler('id', myid)
-    dispatcher.add_handler(myid_handler)
-
-    #start_handler = CommandHandler('start', start)
-    #dispatcher.add_handler(start_handler)
-
-    help_handler = CommandHandler('help', help)
-    dispatcher.add_handler(help_handler)
-
-
+    # Start the Bot
     updater.start_polling()
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
+
 
 if __name__ == '__main__':
     main()
