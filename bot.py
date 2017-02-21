@@ -66,14 +66,13 @@ def run_command(command):
         textoutput = textoutput + '\n' + output.strip()
     rc = process.poll()
     return rc
-    
 
 def start(bot, update):
     welcome_text ="Привет, я бот, жду команды. "
     welcome_text += get_help_text ( update )
     bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
     store_chat ( update )
-    
+
 
 def get_help_text ( update ):
     reload(config)
@@ -100,6 +99,15 @@ def myid(bot, update):
 def add_to_admins(bot, update):
     userid = get_user ( update )
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
+
+def send_to_all(bot, update):
+
+    chat_list = sql_exec ("SELECT * FROM chat")
+    print chat_list
+    for chat in chat_list:
+        print chat
+        bot.sendMessage(chat_id= chat[0] , text='Это сообщение было отправлено всем')
+
 
 def add_to_listeners(bot, update):
     userid = get_user ( update )
@@ -148,6 +156,9 @@ dispatcher.add_handler(add_to_admins_handler)
 
 get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
 dispatcher.add_handler(get_count_chats_handler)
+
+send_to_all_handler = CommandHandler('send_to_all', send_to_all)
+dispatcher.add_handler(send_to_all_handler)
 
 df_handler = CommandHandler('df', df)
 dispatcher.add_handler(df_handler)
