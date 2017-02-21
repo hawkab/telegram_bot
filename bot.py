@@ -42,7 +42,7 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     
-    sql_exec ("INSERT INTO CHAT VALUES (%d, '%s' , '%s' , '%s', '%s')" \
+    sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
@@ -55,7 +55,7 @@ def store_chat ( update ):
 def get_count_usr():
     result = ""
     try:
-        result = sql_exec ("SELECT COUNT(*) FROM CHAT")[0][0]
+        result = sql_exec ("SELECT COUNT(*) FROM chat")[0][0]
     except:
         result = "Ошибка выполнения запроса."
     return result 
