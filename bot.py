@@ -17,7 +17,7 @@ from imp import reload #модуль для перезагрузки (обнов
 #bot = telegram.Bot(token = config.token)
 #Проверка бота
 #print(bot.getMe())
-from telegram import ReplyKeyboardMarkup
+from telegram import (ReplyKeyboardMarkup,ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
 
@@ -118,7 +118,7 @@ def send_to_all(bot, update):
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         print 1
-        update.message.reply_text("Вы уверены, что хотите отправить всем: \n%s?" % promo, reply_markup=markup)
+        update.message.reply_text("Вы уверены, что хотите отправить всем: \n%s?" % promo, reply_markup=ReplyKeyboardRemove())
         print 2
 
 
