@@ -117,7 +117,7 @@ def send_to_all(bot, update):
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         print 1
-        update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
         print 2
 
 
