@@ -109,7 +109,7 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-    
+    return CHOOSE
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды: 
