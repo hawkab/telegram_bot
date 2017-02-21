@@ -116,10 +116,8 @@ def send_to_all(bot, update):
     else:
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-        print 1
         update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
-        print 2
-
+        return send_to_all_confirm_handler
 
 def send_to_all_confirm(bot, update, user_data):
     print update.message.text
@@ -169,8 +167,8 @@ def cancel():
 def main():
 
 
-    send_to_all_confirm_bot_handler = RegexHandler('^(Да)$', send_to_all_confirm, pass_user_data=True)
-    dispatcher.add_handler(send_to_all_confirm_bot_handler)
+    send_to_all_confirm_handler = RegexHandler('^(Да)$', send_to_all_confirm, pass_user_data=True)
+    dispatcher.add_handler(send_to_all_confirm_handler)
 
     restart_bot_handler = CommandHandler('restart_bot', restart_bot)
     dispatcher.add_handler(restart_bot_handler)
