@@ -131,12 +131,7 @@ def send_to_all(bot, update, user_data):
     #    for chat in chat_list:
     #        bot.sendMessage(chat_id= chat[0] , text=promo)
 
-def regular_choice(bot, update, user_data):
-    text = update.message.text
-    user_data['choice'] = text
-    update.message.reply_text('Your %s? Yes, I would love to hear about that!' % text.lower())
 
-    return TYPING_REPLY
 
 def add_to_listeners(bot, update):
     userid = get_user ( update )
@@ -167,7 +162,7 @@ def df(bot, update):
 def free(bot, update):
     reload(config) 
     user = str ( get_user ( update ) )
-    if is_admin ( user ): 
+    if is_admin ( user ):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
@@ -176,16 +171,9 @@ def main():
     conv_handler = ConversationHandler(
 
         states={
-            CHOOSING: [RegexHandler('^(Да)$',
-                                    regular_choice,
-                                    pass_user_data=True),
-                       RegexHandler('^(Нет)...$',
-                                    regular_choice,
-                                    pass_user_data=True),
-                       ],
-        },
-
-        fallbacks=[RegexHandler('^Done$', done, pass_user_data=True)]
+            CHOOSING: [RegexHandler('^(Да)$', send_to_all,
+                                    pass_user_data=True)]
+        }
     )
 
     dispatcher.add_handler(conv_handler)
