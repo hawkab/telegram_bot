@@ -43,16 +43,16 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     print 1
-    message = json.loads(update.message) 
+    message = update.message.get('from') 
     print 2
-    print message['from']['username']
+    print message['username']
     sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name
-            , message['from']['username'] ))
+            , message['username'] ))
     
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
