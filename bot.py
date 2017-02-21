@@ -40,8 +40,8 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     print update
-    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) " \
-        " VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')" \
+    sql_exec ("INSERT INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) " \
+        " VALUES (%d, '%s' , '%s' , '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
@@ -77,7 +77,7 @@ def run_command(command):
     
 
 def start(bot, update):
-    welcome_text ="Привет, я бот, жду команды."
+    welcome_text ="Привет, я бот, жду команды. "
     welcome_text += get_help_text ( update )
 
     bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
@@ -88,7 +88,8 @@ def get_help_text ( update ):
     user = str ( get_user ( update ) )
     help_text = '''Список общедоступных команд: 
     /id - id пользователя'''
-    help_text += '''Список команд администратора:
+    help_text += '''
+Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
     /get_count_users - получить общее число пользователей
