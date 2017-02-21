@@ -178,8 +178,17 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True),
-                       RegexHandler('^Нет$',cancel, pass_user_data=True),]
+            CHOOSING: [RegexHandler('^(Да|да|ДА|lf)$',
+                                    send_to_all_confirm,
+                                    pass_user_data=True),
+                       RegexHandler('^Нет$',
+                                    cancel),
+                       ],
+
+            TYPING_CHOICE: [MessageHandler(Filters.text,
+                                           cancel,
+                                           pass_user_data=True),
+                            ],
         },
 
         fallbacks=[CommandHandler('cancel', cancel, pass_user_data=True)]
