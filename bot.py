@@ -52,7 +52,7 @@ def store_chat ( update ):
 def get_count_usr():
     result = ""
     try:
-        result = sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
+        result = sql_exec ("SELECT COUNT(*) FROM CHAT")[0][0]
     except:
         result = "Ошибка выполнения запроса."
     return result 
