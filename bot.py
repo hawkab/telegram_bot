@@ -171,8 +171,7 @@ def main():
     conv_handler = ConversationHandler(
 
         states={
-            CHOOSING: [RegexHandler('^(Да)$', send_to_all,
-                                    pass_user_data=True)]
+            CHOOSING: [RegexHandler('^(Да)$', send_to_all)]
         }
     )
 
