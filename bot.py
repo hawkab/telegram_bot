@@ -57,7 +57,6 @@ def get_count_usr():
     result = ""
     try:
         result = sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
-        print result
     except:
         result = "Ошибка выполнения запроса."
     return result 
@@ -82,8 +81,8 @@ def run_command(command):
     
 
 def start(bot, update):
-    store_chat ( update )
     bot.sendMessage(chat_id= get_chat ( update ), text="Привет, я бот, жду команды.")
+    store_chat ( update )
 
 def help(bot, update):
     reload(config)
