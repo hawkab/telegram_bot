@@ -42,25 +42,14 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     
-    sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s')" \
+    sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
             , update.message.chat.first_name 
-            , update.message.chat.last_name ))
-    print sql_exec (" select * from chat")
+            , update.message.chat.last_name
+            , update.message['from'].username ))
     
-    
-
-def get_count_usr():
-    result = ""
-    try:
-        result = sql_exec ("SELECT COUNT(*) FROM chat")[0][0]
-    except:
-        result = "Ошибка выполнения запроса."
-    return result 
-
-
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
@@ -95,7 +84,7 @@ def get_help_text ( update ):
 Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
-    /get_count_users - получить общее число пользователей
+    /get_count_chats - получить общее число пользователей
     /add_to_listeners - waiting for impl
     /add_to_admins - waiting for impl
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
@@ -116,8 +105,13 @@ def add_to_listeners(bot, update):
     userid = get_user ( update )
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
-def get_count_users (bot, update):
-    bot.sendMessage(chat_id= get_chat ( update ) , text=get_count_usr())
+def get_count_chats (bot, update):
+    result = ""
+    try:
+        result = sql_exec ("SELECT COUNT(*) FROM chat")[0][0]
+    except:
+        result = "Ошибка выполнения запроса."
+    bot.sendMessage(chat_id= get_chat ( update ) , text=result)
     
 def restart_bot(bot, update):
     reload(config) 
@@ -152,8 +146,8 @@ dispatcher.add_handler(add_to_listeners_handler)
 add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
 dispatcher.add_handler(add_to_admins_handler)
 
-get_count_users_handler = CommandHandler('get_count_users', get_count_users)
-dispatcher.add_handler(get_count_users_handler)
+get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
+dispatcher.add_handler(get_count_chats_handler)
 
 df_handler = CommandHandler('df', df)
 dispatcher.add_handler(df_handler)
