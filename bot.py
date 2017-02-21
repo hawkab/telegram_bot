@@ -8,6 +8,7 @@ import sys
 import shlex
 import datetime
 import MySQLdb
+import json
 from subprocess import Popen, PIPE
 from telegram.ext import CommandHandler
 from imp import reload #модуль для перезагрузки (обновления) других модулей
@@ -41,8 +42,7 @@ def sql_exec ( request ):
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-    message = update.message
-    print update
+    message = json.loads(update.message) 
     print message['from']['username']
     sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
         % ( chat_id 
@@ -50,7 +50,7 @@ def store_chat ( update ):
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name
-            , update.message['from']['username'] ))
+            , message['from']['username'] ))
     
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
