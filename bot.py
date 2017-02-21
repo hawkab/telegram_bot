@@ -173,7 +173,7 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSE: [RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)]
+            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)]
         },
 
         fallbacks=[CommandHandler('cancel', send_to_all_confirm)]
