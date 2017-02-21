@@ -17,7 +17,9 @@ from imp import reload #модуль для перезагрузки (обнов
 #bot = telegram.Bot(token = config.token)
 #Проверка бота
 #print(bot.getMe())
-from telegram.ext import Updater
+from telegram import ReplyKeyboardMarkup
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
+                          ConversationHandler)
 
 CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
 
