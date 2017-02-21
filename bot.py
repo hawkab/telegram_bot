@@ -109,7 +109,7 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-    return CHOOSE
+    print 'enter in send'
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды: 
@@ -118,7 +118,6 @@ def send_to_all(bot, update):
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
-        return CHOOSE
 
 def send_to_all_confirm(bot, update, user_data):
     print 1
