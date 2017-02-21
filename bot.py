@@ -21,7 +21,7 @@ from telegram import ReplyKeyboardMarkup
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
 
-CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
+CHOOSING = range(1)
 
 reply_keyboard = [['Да', 'Нет']]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
@@ -170,16 +170,6 @@ def main():
                                     regular_choice,
                                     pass_user_data=True)
                        ],
-
-            TYPING_CHOICE: [MessageHandler(Filters.text,
-                                           regular_choice,
-                                           pass_user_data=True),
-                            ],
-
-            TYPING_REPLY: [MessageHandler(Filters.text,
-                                          received_information,
-                                          pass_user_data=True),
-                           ],
         },
 
         fallbacks=[RegexHandler('^Done$', done, pass_user_data=True)]
