@@ -161,7 +161,7 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
-def cancel(bot, update):
+def cancel(bot, update, user_data):
     print 'cancel'
     update.message.reply_text('Bye! I hope we can talk again some day.',
                               reply_markup=ReplyKeyboardRemove())
@@ -174,10 +174,10 @@ def main():
 
         states={
             CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True),
-                       RegexHandler('^Нет$',cancel),]
+                       RegexHandler('^Нет$',cancel, pass_user_data=True),]
         },
 
-        fallbacks=[CommandHandler('cancel', cancel)]
+        fallbacks=[CommandHandler('cancel', cancel, pass_user_data=True)]
     )
 
     dispatcher.add_handler(conv_handler)
