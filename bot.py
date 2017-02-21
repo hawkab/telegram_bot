@@ -176,7 +176,10 @@ def main():
     conv_handler = ConversationHandler(
 
         states={
-            CHOOSING: [RegexHandler('^(Да|Нет)$',
+            CHOOSING: [RegexHandler('^(Да)$',
+                                    regular_choice,
+                                    pass_user_data=True),
+                       RegexHandler('^(Нет)...$',
                                     regular_choice,
                                     pass_user_data=True)
                        ],
