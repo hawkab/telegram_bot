@@ -7,7 +7,7 @@ import subprocess
 import sys
 import shlex
 import datetime
-import sqlite3
+import MySQLdb
 from subprocess import Popen, PIPE
 from telegram.ext import CommandHandler
 from imp import reload #модуль для перезагрузки (обновления) других модулей
@@ -29,13 +29,13 @@ def get_chat ( update ):
     return update.message.chat_id
 
 def sql_exec ( request ):
-    con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db' , timeout=10)
+    con = db = MySQLdb.connect("localhost","king","masterkey1","telegram_bot" )
     cur = con.cursor()
     cur.execute ( request )
     con.commit()
     result = cur.fetchall()
     con.close()
-    
+
     return result
 
 def store_chat ( update ):
