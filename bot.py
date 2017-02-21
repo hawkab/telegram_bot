@@ -102,10 +102,10 @@ def add_to_admins(bot, update):
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
 
 def send_to_all(bot, update):
-
+    promo = "Это сообщение было отправлено всем чатам"
     chat_list = sql_exec ("SELECT * FROM chat")
     for chat in chat_list:
-        bot.sendMessage(chat_id= chat[0] , text='Кто тебя создал... такую?')
+        bot.sendMessage(chat_id= chat[0] , text=promo)
 
 
 def add_to_listeners(bot, update):
@@ -141,36 +141,40 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
-start_handler = CommandHandler('start', start)
-dispatcher.add_handler(start_handler)
+def main():
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
 
-restart_bot_handler = CommandHandler('restart_bot', restart_bot)
-dispatcher.add_handler(restart_bot_handler)
+    restart_bot_handler = CommandHandler('restart_bot', restart_bot)
+    dispatcher.add_handler(restart_bot_handler)
 
-add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
-dispatcher.add_handler(add_to_listeners_handler)
+    add_to_listeners_handler = CommandHandler('add_to_listeners', add_to_listeners)
+    dispatcher.add_handler(add_to_listeners_handler)
 
-add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
-dispatcher.add_handler(add_to_admins_handler)
+    add_to_admins_handler = CommandHandler('add_to_admins', add_to_admins)
+    dispatcher.add_handler(add_to_admins_handler)
 
-get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
-dispatcher.add_handler(get_count_chats_handler)
+    get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
+    dispatcher.add_handler(get_count_chats_handler)
 
-send_to_all_handler = CommandHandler('send_to_all', send_to_all)
-dispatcher.add_handler(send_to_all_handler)
+    send_to_all_handler = CommandHandler('send_to_all', send_to_all)
+    dispatcher.add_handler(send_to_all_handler)
 
-df_handler = CommandHandler('df', df)
-dispatcher.add_handler(df_handler)
+    df_handler = CommandHandler('df', df)
+    dispatcher.add_handler(df_handler)
 
-free_handler = CommandHandler('free', free)
-dispatcher.add_handler(free_handler)
-
-
-myid_handler = CommandHandler('id', myid)
-dispatcher.add_handler(myid_handler)
-
-help_handler = CommandHandler('help', help)
-dispatcher.add_handler(help_handler)
+    free_handler = CommandHandler('free', free)
+    dispatcher.add_handler(free_handler)
 
 
-updater.start_polling()
+    myid_handler = CommandHandler('id', myid)
+    dispatcher.add_handler(myid_handler)
+
+    help_handler = CommandHandler('help', help)
+    dispatcher.add_handler(help_handler)
+
+
+    updater.start_polling()
+    
+if __name__ == '__main__':
+    main()
