@@ -42,11 +42,11 @@ def store_chat ( update ):
     print update
     sql_exec ("INSERT OR REPLACE INTO USER (ID, FIRST_NAME, LAST_NAME, USERNAME)" \
         " VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s' )" %  ( user_id 
-            , update.message.from_user.first_name 
-            , update.message.from_user.last_name 
-            , update.message.from_user.username ))
+            , update.message.from.first_name 
+            , update.message.from.last_name 
+            , update.message.from.username ))
     print 2
-    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')" % ( chat_id , update.message.type , update.message.title , update.message.first_name , update.message.last_name ))
+    sql_exec ("INSERT OR REPLACE INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) VALUES ((SELECT ID FROM CHAT WHERE ID = %d), '%s' , '%s' , '%s', '%s')" % ( chat_id , update.message.chat.type , update.message.chat.title , update.message.chat.first_name , update.message.chat.last_name ))
     
 
 def get_count_usr():
