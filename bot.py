@@ -166,13 +166,19 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
+def cancel():
+    pass
+
 def main():
 
     conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSING: [RegexHandler('^(Да|Lf|Da|Yes)$', send_to_all, pass_user_data=True),{}]
-        }
+            CHOOSING: [RegexHandler('^(Да)$', send_to_all, pass_user_data=True)],
+        },
+
+        fallbacks=[CommandHandler('cancel', cancel)]
     )
 
     dispatcher.add_handler(conv_handler)
@@ -202,8 +208,8 @@ def main():
     myid_handler = CommandHandler('id', myid)
     dispatcher.add_handler(myid_handler)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    #start_handler = CommandHandler('start', start)
+    #dispatcher.add_handler(start_handler)
 
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
