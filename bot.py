@@ -77,23 +77,28 @@ def run_command(command):
     
 
 def start(bot, update):
-    bot.sendMessage(chat_id= get_chat ( update ), text="Привет, я бот, жду команды.")
+    welcome_text ="Привет, я бот, жду команды."
+    welcome_text += get_help_text ( update )
+
+    bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
     store_chat ( update )
 
-def help(bot, update):
+def get_help_text ( update ):
     reload(config)
     user = str ( get_user ( update ) )
-    help_message = '''Список общедоступных команд: 
+    help_text = '''Список общедоступных команд: 
     /id - id пользователя'''
-    help_message += '''Список команд администратора:
+    help_text += '''Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
     /get_count_users - получить общее число пользователей
     /add_to_listeners - waiting for impl
     /add_to_admins - waiting for impl
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
-    
-    bot.sendMessage(chat_id= get_chat ( update ) , text = help_message )
+    return help_text
+
+def help(bot, update):
+    bot.sendMessage(chat_id= get_chat ( update ) , text = get_help_text ( update ) )
 
 def myid(bot, update):
     userid = get_user ( update )
