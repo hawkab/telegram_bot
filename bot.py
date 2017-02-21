@@ -24,7 +24,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
-CHOOSE, PHOTO, LOCATION, BIO = range(4)
+CHOOSE = range(1)
 
 
 def is_admin ( user ):
@@ -175,10 +175,8 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm,
-                                    pass_user_data=True),
-                       RegexHandler('^Нет$',
-                                    cancel),]
+            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True),
+                       RegexHandler('^Нет$',cancel),]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]
