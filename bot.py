@@ -134,9 +134,9 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
+updater = Updater(token=config.token)
+dispatcher = updater.dispatcher
 def main():
-    updater = Updater(token=config.token)
-    dispatcher = updater.dispatcher
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
 
