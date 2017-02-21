@@ -181,7 +181,7 @@ def main():
                                     pass_user_data=True),
                        RegexHandler('^(Нет)...$',
                                     regular_choice,
-                                    pass_user_data=True)
+                                    pass_user_data=True),
                        ],
         },
 
