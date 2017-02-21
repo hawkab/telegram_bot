@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 import config #файл с настройками
-import telegram, Job, os, subprocess
-import sys, shlex, datetime, MySQLdb
+import telegram
+import os
+import subprocess
+import sys
+import shlex
+import datetime
+import MySQLdb
+import json
 from subprocess import Popen, PIPE
 from telegram.ext import CommandHandler
 from imp import reload #модуль для перезагрузки (обновления) других модулей
@@ -11,7 +17,8 @@ from imp import reload #модуль для перезагрузки (обнов
 #Проверка бота
 #print(bot.getMe())
 from telegram.ext import Updater
-
+updater = Updater(token=config.token)
+dispatcher = updater.dispatcher
 
 def is_admin ( user ):
     return True if user in config.admin else False
@@ -134,8 +141,6 @@ def free(bot, update):
         run_command("free -m")
         bot.sendMessage(chat_id= get_chat ( update ), text=textoutput)
 
-updater = Updater(token=config.token)
-dispatcher = updater.dispatcher
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
@@ -169,4 +174,3 @@ dispatcher.add_handler(help_handler)
 
 
 updater.start_polling()
-
