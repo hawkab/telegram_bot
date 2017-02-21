@@ -120,10 +120,9 @@ def send_to_all(bot, update):
         update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
         return CHOOSE
 
-def send_to_all_confirm(bot, update, user_data):
+def send_to_all_confirm(bot, update):
     print 1
     print update.message.text
-    print user_data['choice'] 
     #chat_list = sql_exec ("SELECT * FROM chat")
     #    for chat in chat_list:
     #        bot.sendMessage(chat_id= chat[0] , text=promo)
@@ -165,6 +164,8 @@ def free(bot, update):
 
 def cancel(bot, update):
     print 'cancel'
+    update.message.reply_text('Bye! I hope we can talk again some day.',
+                              reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
 
 def main():
