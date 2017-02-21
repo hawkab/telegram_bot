@@ -76,7 +76,7 @@ def run_command(command):
 def start(bot, update):
     welcome_text ="Привет, я бот, жду команды. "
     welcome_text += get_help_text ( update )
-    bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
+    #bot.sendMessage(chat_id= get_chat ( update ), text= welcome_text )
     try:
         store_chat ( update )
     except:
