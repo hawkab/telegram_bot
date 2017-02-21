@@ -60,6 +60,12 @@ def myid(bot, update):
     userid = get_user ( update )
     bot.sendMessage(chat_id=update.message.chat_id, text=userid)
     
+def restart_bot(bot, update):
+    reload(config) 
+    user = str ( get_user ( update ) )
+    if is_admin ( user ): 
+        run_command("systemctl restart telegram-bot.service && systemctl status telegram-bot.service")
+        bot.sendMessage(chat_id=update.message.chat_id, text=textoutput)
 
 def df(bot, update):
     reload(config) 
@@ -85,6 +91,9 @@ def mpstat(bot, update):
     
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
+
+restart_bot_handler = CommandHandler('restart_bot', restart_bot)
+dispatcher.add_handler(restart_bot_handler)
 
 df_handler = CommandHandler('df', df)
 dispatcher.add_handler(df_handler)
