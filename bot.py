@@ -81,6 +81,8 @@ def start(bot, update):
         store_chat ( update )
     except:
         pass
+    reply_keyboard = [['Да', 'Нет']]
+    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
     return CHOOSE
 
