@@ -178,7 +178,7 @@ def main():
         fallbacks=[CommandHandler('cancel', send_to_all_confirm)]
     )
 
-    dp.add_handler(conv_handler)
+    dispatcher.add_handler(conv_handler)
 
     #send_to_all_confirm_handler = RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)
     #dispatcher.add_handler(send_to_all_confirm_handler)
