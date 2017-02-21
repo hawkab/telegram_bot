@@ -29,7 +29,7 @@ def get_chat ( update ):
     return update.message.chat_id
 
 def sql_exec ( request ):
-    con = db = MySQLdb.connect("localhost","king","masterkey1","telegram_bot" )
+    con = MySQLdb.connect("localhost","king","masterkey1","telegram_bot" )
     cur = con.cursor()
     cur.execute ( request )
     con.commit()
