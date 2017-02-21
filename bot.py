@@ -52,8 +52,12 @@ def store_chat ( update ):
             , update.message.from_user.username ))
 
 def get_count_usr():
-    result = sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
-    return result if result else "Ошибка выполнения запроса."
+    result = ""
+    try:
+        result = sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
+    except:
+        result = "Ошибка выполнения запроса."
+    return result 
 
 
 #выполнение команды shell и вывод результата в телеграмм
