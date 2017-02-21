@@ -21,10 +21,11 @@ from telegram import (ReplyKeyboardMarkup,ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
                           ConversationHandler)
 
-CHOOSING = range(1)
-
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
+
+CHOOSE, PHOTO, LOCATION, BIO = range(4)
+
 
 def is_admin ( user ):
     return True if user in config.admin else False
@@ -117,7 +118,7 @@ def send_to_all(bot, update):
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
-        return send_to_all_confirm_handler
+        return CHOOSE
 
 def send_to_all_confirm(bot, update, user_data):
     print 1
@@ -167,9 +168,20 @@ def cancel():
 
 def main():
 
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
 
-    send_to_all_confirm_handler = RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)
-    dispatcher.add_handler(send_to_all_confirm_handler)
+        states={
+            CHOOSE: [RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)]
+        },
+
+        fallbacks=[CommandHandler('cancel', send_to_all_confirm)]
+    )
+
+    dp.add_handler(conv_handler)
+
+    #send_to_all_confirm_handler = RegexHandler('^([Дд]|Да|да|ДА|lf)$', send_to_all_confirm, pass_user_data=True)
+    #dispatcher.add_handler(send_to_all_confirm_handler)
 
     restart_bot_handler = CommandHandler('restart_bot', restart_bot)
     dispatcher.add_handler(restart_bot_handler)
@@ -196,8 +208,8 @@ def main():
     myid_handler = CommandHandler('id', myid)
     dispatcher.add_handler(myid_handler)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    #start_handler = CommandHandler('start', start)
+    #dispatcher.add_handler(start_handler)
 
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
