@@ -112,12 +112,13 @@ def send_to_all(bot, update):
     promo = update.message.text.strip().replace('/send_to_all', '').strip()
     if promo == '':
         bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды 
+
 /send_to_all Этот текст будет отправлен всем чатам''')
     else:
         reply_keyboard = [['Да', 'Нет']]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         print 1
-        update.message.reply_text("Вы уверены, что хотите отправить всем: %s?" % promo, reply_markup=markup)
+        update.message.reply_text("Вы уверены, что хотите отправить всем: \n%s?" % promo, reply_markup=markup)
         print 2
 
 
