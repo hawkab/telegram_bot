@@ -39,12 +39,13 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     
-    print sql_exec ("INSERT INTO CHAT VALUES (%d, '%s' , '%s' , '%s', '%s')" \
+    sql_exec ("INSERT INTO CHAT VALUES (%d, '%s' , '%s' , '%s', '%s')" \
         % ( chat_id 
             , update.message.chat.type 
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name ))
+    print sql_exec (" select * from chat")
     
     
 
