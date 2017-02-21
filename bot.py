@@ -104,7 +104,7 @@ def add_to_admins(bot, update):
 
 def send_to_all(bot, update):
 
-    promo = str.replace ( update.message.text , '/send_to_all ', '')
+    promo = update.message.text.replace('/send_to_all ', '')
     chat_list = sql_exec ("SELECT * FROM chat")
     for chat in chat_list:
         bot.sendMessage(chat_id= chat[0] , text=promo)
