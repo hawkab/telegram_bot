@@ -81,6 +81,7 @@ def start(bot, update):
         store_chat ( update )
     except:
         pass
+    update.message.reply_text("Вы уверены, что хотите отправить всем?", reply_markup=markup)
     return CHOOSE
 
 
@@ -202,8 +203,8 @@ def main():
     #get_count_chats_handler = CommandHandler('get_count_chats', get_count_chats)
     #dispatcher.add_handler(get_count_chats_handler)
 
-    send_to_all_handler = CommandHandler('send_to_all', send_to_all)
-    dispatcher.add_handler(send_to_all_handler)
+    #send_to_all_handler = CommandHandler('send_to_all', send_to_all)
+    #dispatcher.add_handler(send_to_all_handler)
 
     #df_handler = CommandHandler('df', df)
     #dispatcher.add_handler(df_handler)
