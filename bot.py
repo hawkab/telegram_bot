@@ -87,7 +87,7 @@ def get_help_text ( update ):
     /get_count_chats - получить общее число чатов
     /add_to_listeners - waiting for impl
     /add_to_admins - waiting for impl
-    /send_to_all - отправка сообщения всем чатам
+    /send_to_all [текст] - отправка сообщения всем чатам
     /restart_bot - перезагрузка после обновления кода''' if is_admin ( user ) else ""
     return help_text
 
@@ -104,10 +104,14 @@ def add_to_admins(bot, update):
 
 def send_to_all(bot, update):
 
-    promo = update.message.text.replace('/send_to_all ', '')
-    chat_list = sql_exec ("SELECT * FROM chat")
-    for chat in chat_list:
-        bot.sendMessage(chat_id= chat[0] , text=promo)
+    promo = update.message.text.strip().replace('/send_to_all', '').strip()
+    if promo == '':
+        bot.sendMessage( get_chat ( update ) , text='''Требуется ввести текст сообщения после команды 
+    /send_to_all [текст]''')
+    else:
+        chat_list = sql_exec ("SELECT * FROM chat")
+        for chat in chat_list:
+            bot.sendMessage(chat_id= chat[0] , text=promo)
 
 
 def add_to_listeners(bot, update):
