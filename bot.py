@@ -52,7 +52,8 @@ def help(bot, update):
     help_message += '''Список команд администратора:
     /df - информация о дисковом пространстве (df -h)
     /free - информация о памяти
-    /mpstat - информация о нагрузке на процессор''' if is_admin ( user ) else ""
+    /mpstat - информация о нагрузке на процессор
+    /restart_bot - перезагрузка службы бота после обновления кода''' if is_admin ( user ) else ""
     
     bot.sendMessage(chat_id=update.message.chat_id, text = help_message )
 
