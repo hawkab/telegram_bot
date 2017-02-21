@@ -30,7 +30,7 @@ def get_chat ( update ):
 
 def sql_exec ( request ):
     con = sqlite3.connect('/home/hawkab/telegram_bot/bot_store.db' , timeout=10)
-
+    print request
     cur = con.cursor()
     cur.execute ( request )
     
@@ -47,7 +47,7 @@ def store_chat ( update ):
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name ))
-    print update
+    
     
 
 def get_count_usr():
