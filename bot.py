@@ -115,8 +115,10 @@ def send_to_all(bot, update):
 /send_to_all Этот текст будет отправлен всем чатам''')
     else:
         reply_keyboard = [['Да', 'Нет']]
-        update.message.reply_text("Вы уверены, что хотите отправить всем: ?", ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         print 1
+        update.message.reply_text("Вы уверены, что хотите отправить всем: %s?" % promo, reply_markup=markup)
+        print 2
 
 
 
