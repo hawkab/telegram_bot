@@ -38,7 +38,7 @@ def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
     
-    finded = sql_exec ("SELECT COUNT(*) FROM CHAT C WHERE C.ID = %d" % chat_id)[0]
+    finded = sql_exec ("SELECT COUNT(*) FROM CHAT C WHERE C.ID = %d" % chat_id)[0][0]
 
     if finded == 0:
         sql_exec ("INSERT INTO CHAT VALUES (%d,%s,%s,%s,%s)" % 
@@ -49,7 +49,7 @@ def store_chat ( update ):
                 , update.message.last_name ))
 
     
-    finded = sql_exec ( "SELECT COUNT(*) FROM USER U WHERE U.ID = %d" % user_id )[0]
+    finded = sql_exec ( "SELECT COUNT(*) FROM USER U WHERE U.ID = %d" % user_id )[0][0]
 
     if finded == 0:
         sql_exec ("INSERT INTO USER VALUES (%d,%s,%s,%s)" % 
@@ -59,7 +59,7 @@ def store_chat ( update ):
                 , update.message.from_user.username ))
 
 def get_count_usr():
-    return sql_exec ("SELECT COUNT(*) FROM USER")[0]
+    return sql_exec ("SELECT COUNT(*) FROM USER")[0][0]
 
 
 #выполнение команды shell и вывод результата в телеграмм
