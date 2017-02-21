@@ -48,7 +48,7 @@ def store_chat ( update ):
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name
-            , update.message['from'].username ))
+            , update.message['from']['username'] ))
     
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
