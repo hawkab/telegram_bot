@@ -39,7 +39,7 @@ def sql_exec ( request ):
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
-    print update
+    
     sql_exec ("INSERT INTO CHAT (ID, TYPE, TITLE, FIRST_NAME, LAST_NAME) " \
         " VALUES (%d, '%s' , '%s' , '%s', '%s')" \
         % ( chat_id 
@@ -47,6 +47,7 @@ def store_chat ( update ):
             , update.message.chat.title 
             , update.message.chat.first_name 
             , update.message.chat.last_name ))
+    print update
     
 
 def get_count_usr():
