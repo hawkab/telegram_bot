@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 import sys
-from libraries import *
-
 sys.path.insert(0, "common_func")
 
 from execSQL import *
+from libraries import *
 
 class Object():
 	pass
