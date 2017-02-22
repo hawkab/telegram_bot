@@ -47,20 +47,3 @@ def store_chat ( update ):
             , update.message.chat.first_name 
             , update.message.chat.last_name
             , update.message.from_user.username ))
-    
-#выполнение команды shell и вывод результата в телеграмм
-def run_command(command):
-    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-    
-    textoutput = ''
-    while True:
-        global output
-        output = process.stdout.readline()
-        output = output.decode('utf8')
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            print (output.strip())
-        textoutput = textoutput + '\n' + output.strip()
-    rc = process.poll()
-    return rc

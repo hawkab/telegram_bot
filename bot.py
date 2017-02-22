@@ -3,7 +3,6 @@
 
 from common_func import *
 
-global textoutput
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
@@ -24,7 +23,23 @@ def start(bot, update):
         pass
     return CHOOSE
 
-
+#выполнение команды shell и вывод результата в телеграмм
+def run_command(command):
+    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+    global textoutput
+    textoutput = ''
+    while True:
+        global output
+        output = process.stdout.readline()
+        output = output.decode('utf8')
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print (output.strip())
+        textoutput = textoutput + '\n' + output.strip()
+    rc = process.poll()
+    return rc
+    
 def get_help_text ( update ):
     reload(config)
     user = str ( get_user ( update ) )
