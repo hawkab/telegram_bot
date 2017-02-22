@@ -16,7 +16,6 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 sys.path.insert(0, "common_func")
 
 from execSQL import *
-from time import sleep
 
 class Object():
 	pass
@@ -38,7 +37,6 @@ def get_user ( update ):
 def get_chat ( update ):
     return update.message.chat_id
 
-
 def store_chat ( update ):
     chat_id = get_chat ( update )
     user_id = get_user ( update )
@@ -53,7 +51,7 @@ def store_chat ( update ):
 #выполнение команды shell и вывод результата в телеграмм
 def run_command(command):
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-    global textoutput
+    
     textoutput = ''
     while True:
         global output

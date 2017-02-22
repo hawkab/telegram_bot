@@ -3,6 +3,7 @@
 
 from common_func import *
 
+global textoutput
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
