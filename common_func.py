@@ -16,11 +16,7 @@ from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, Rege
 sys.path.insert(0, "common_func")
 
 from execSQL import *
-from toast import * 
-from mcolors import * 
 from time import sleep
-from setupcon import *
-
 
 class Object():
 	pass
