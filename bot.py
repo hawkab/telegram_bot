@@ -1,77 +1,17 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
-import config #файл с настройками
-import telegram
-import os
-import subprocess
-import sys
-import shlex
-import datetime
-import MySQLdb
 
-from time import sleep
-from subprocess import Popen, PIPE
-from telegram.ext import CommandHandler
-from imp import reload #модуль для перезагрузки (обновления) других модулей
-
-#bot = telegram.Bot(token = config.token)
-#Проверка бота
-#print(bot.getMe())
-from telegram import (ReplyKeyboardMarkup,ReplyKeyboardRemove)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler, ConversationHandler)
+from common_func import *
 
 updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
 CHOOSE, OTHER = range(2)
 
-
-def is_admin ( user ):
-    return True if user in config.admin else False
-
-def get_user ( update ):
-    return update.message.from_user.id
-
-def get_chat ( update ):
-    return update.message.chat_id
-
-def sql_exec ( request ):
-    con = MySQLdb.connect("localhost","king","masterkey1","telegram_bot" )
-    cur = con.cursor()
-    cur.execute ( request )
-    con.commit()
-    result = cur.fetchall()
-    con.close()
-
-    return result
-
-def store_chat ( update ):
-    chat_id = get_chat ( update )
-    user_id = get_user ( update )
-    sql_exec ("INSERT INTO chat VALUES (%d, '%s' , '%s' , '%s', '%s', '%s')" \
-        % ( chat_id 
-            , update.message.chat.type 
-            , update.message.chat.title 
-            , update.message.chat.first_name 
-            , update.message.chat.last_name
-            , update.message.from_user.username ))
-    
-#выполнение команды shell и вывод результата в телеграмм
-def run_command(command):
-    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-    global textoutput
-    textoutput = ''
-    while True:
-        global output
-        output = process.stdout.readline()
-        output = output.decode('utf8')
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            print (output.strip())
-        textoutput = textoutput + '\n' + output.strip()
-    rc = process.poll()
-    return rc
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def start(bot, update):
     welcome_text ="Привет, я бот, жду команды. "
@@ -131,8 +71,6 @@ def send_to_all_confirm(bot, update, user_data):
     #    for chat in chat_list:
     #        bot.sendMessage(chat_id= chat[0] , text=promo)
 
-
-
 def add_to_listeners(bot, update):
     userid = get_user ( update )
     bot.sendMessage(chat_id= get_chat ( update ) , text=userid)
@@ -171,6 +109,9 @@ def cancel(bot, update, user_data):
     update.message.reply_text('Bye! I hope we can talk again some day.',
                               reply_markup=ReplyKeyboardRemove())
     return ConversationHandler.END
+
+def error(bot, update, error):
+    logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def main():
 
@@ -230,6 +171,7 @@ def main():
     help_handler = CommandHandler('help', help)
     dispatcher.add_handler(help_handler)
 
+    dispatcher.add_error_handler(error)
 
     updater.start_polling()
     updater.idle()
