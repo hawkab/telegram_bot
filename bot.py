@@ -13,11 +13,12 @@ def main():
         entry_points=[CommandHandler('start', start)],
 
         states={
-            CHOOSE: [RegexHandler('^(Да|да|ДА|lf)$',
+            CHOOSE: [RegexHandler('^(Да)$',
                                     send_to_all_confirm,
                                     pass_user_data=True),
-                       RegexHandler('^Нет$',
-                                    cancel),
+                       RegexHandler('^(Нет)$',
+                                    cancel,
+                                    pass_user_data=True),
                        ],
 
             OTHER: [MessageHandler(Filters.text,

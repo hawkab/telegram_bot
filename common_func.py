@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python
 import sys
-sys.path.insert(0, "common_func")
+sys.path.insert(0, "/home/hawkab/telegram_bot/common_func.py")
 
 from execSQL import *
 from libraries import *
